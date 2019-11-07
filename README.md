@@ -1,4 +1,4 @@
-# Injección de NoSQL
+# Injección de NoSQL con Node.js
 
 # # Primer paso: iniciar instancia de mongod
 
