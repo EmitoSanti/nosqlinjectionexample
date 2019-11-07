@@ -16,7 +16,7 @@
 # # Quinto paso con Postman realizar:
     * un POST a http://localhost:3000/login
     * el body los parametros en RAW y JSON con el siguiente mensaje
-        ``` [JSON]
+        ``` [JAVASCRIPT]
         {
             "user" : {"$gt":""},
             "password" : {"$gt":""}
