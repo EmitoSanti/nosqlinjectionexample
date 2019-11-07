@@ -15,13 +15,13 @@
 
 # # Quinto paso con Postman realizar:
     * un POST a http://localhost:3000/login
+
     * el body los parametros en RAW y JSON con el siguiente mensaje
-        ``` [JAVASCRIPT]
         {
             "user" : {"$gt":""},
             "password" : {"$gt":""}
         }
-        ```
+  
     * Realizar "SEND"
 
 Fuente: [https://scotch.io/@401/mongodb-injection-in-nodejs] 
