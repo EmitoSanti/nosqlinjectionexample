@@ -18,8 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Pra ejecutar la query segura dejar la variable security entrue
-security = false; // Para ejecutar la query no segura dejar security enfalse
-
+security = true; // Para ejecutar la query no segura dejar security en false
 
 app.get('/', function (req, res) {
     res.send('Buenas Buenas, Probamos inyección NoSQL y solución?');
@@ -51,6 +50,7 @@ app.post('/login',function(req,res){
         var user = sanitize(req.body.user);
         var password = sanitize(req.body.password);
         User.findOne({'user': { $in: [user] },'password': { $in: [password] }},function(err,data){
+            // Hay q realizar una mejora para castear el mensaje de error cuando se realiza una inyección y el sistema la liquida
             if(err){
                 res.send(err);
             }else if(data){
@@ -90,7 +90,8 @@ var server = app.listen(3000, function () {
     console.log('Express app listening on port %d', server.address().port);
 
     if (seed) {
-        [['David', 'Emiliano', 'Santiago'], ['david', 'emito', 'santiago'], ['1234', '4321', '0123']].forEach(function (cred) {
+        // genera tres registros en la base de datos justo en la "tabla/esquema User"
+        [['David', 'david', '1234'], ['Emiliano', 'emito', '1234'], ['Santiago', 'santiago', '1234']].forEach(function (cred) {
             var instance = new User();
 
             instance.name = cred[0];
