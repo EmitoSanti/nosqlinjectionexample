@@ -23,19 +23,14 @@
 
 # # Quinto paso con Postman realizar:
     * un POST a http://localhost:3000/login
-<<<<<<< HEAD
     * el body los parametros en RAW y JSON con alguno de estos 2 mensajes (elegir uno en cada POST):
         Inyección NoSQL:
         ```
-=======
-
-    * el body los parametros en RAW y JSON con el siguiente mensaje
->>>>>>> 341d1275b1713eaedeed69b4e0a14ddfc8e98a95
         {
             "user" : {"$gt":""},
             "password" : {"$gt":""}
         }
-<<<<<<< HEAD
+
         ```
         Si esta en modo seguro la la inyección falla
 
@@ -49,9 +44,4 @@
     * Realizar "SEND"
 
 Fuente: [https://scotch.io/@401/mongodb-injection-in-nodejs]
-=======
-  
-    * Realizar "SEND"
 
-Fuente: [https://scotch.io/@401/mongodb-injection-in-nodejs] 
->>>>>>> 341d1275b1713eaedeed69b4e0a14ddfc8e98a95
