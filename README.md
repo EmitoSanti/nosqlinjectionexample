@@ -6,7 +6,7 @@
 
     Debemos aprender a estar un paso adelante y realizar un código limpio y seguro.
 
-# # # Prerequisitos, tener instalado:
+### Prerequisitos, tener instalado:
     * mongodb
     * nodejs
 
