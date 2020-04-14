@@ -1,14 +1,19 @@
 var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
+var app = express(); // creación de una aplicación con express
+var mongoose = require('mongoose'); // utilizamos mongoose como ODM
 
-require('./user.js'); // User Schema
-var  User =  mongoose.model('User');
-var seed = false; // Para poblar la base de datos poner seed en true
+require('./user.js'); // Obtenemos el esquema de User
+var User = mongoose.model('User'); // La variable User es difinido como un modelo de objeto de tipo User
+
+/* Esta variable es para poblar la base de datos de forma automatica.
+    Solo usar "seed = true" en la primera ejecición de la aplicación, 
+    luego volverla a false en las siguientes ejecuciones  
+*/
+var seed = false;
 
 /*
-    Debemos validar y desinfectar los campones necesarios si son String, 
-    para esto también puede usar el paquete mongo-sanitize.
+    Presento "mongo-sanitize" que permite mitigar la vulnerabilidad de inyección de NoSQL
+    Validar y desinfecta los campones necesarios y los combierte en String.
 */
 var sanitize = require('mongo-sanitize'); 
 
@@ -17,78 +22,81 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-// Pra ejecutar la query segura dejar la variable security entrue
-security = true; // Para ejecutar la query no segura dejar security en false
+// Esta variable es solamente utilizada para cambiar la ejecución de la aplicacion en modo seguro o no seguro
+var security = true; // Para ejecutar en modo no seguro dejar security en false
 
 app.get('/', function (req, res) {
     res.send('Buenas Buenas, Probamos inyección NoSQL y solución?');
 });
 
-// Signup of user
+// Signup of user, por si queremos crear mas usuarios.
 app.post('/signup', function (req, res) {
     var newUser = new User(req.body);
 
-    newUser.save(function(err){
-        if(err){
+    newUser.save(function(err) {
+        if(err) {
             res.send(err);
-        }else{
+        } else {
             res.send('Usuario registrado exitosamente!!');
         }
     })
 });
   
-// Login of user with/without security
-app.post('/login',function(req,res){
-    if (security){
-        // Se ejecuta la query segura
-        // Si en los parametros del POST tiene {"$ gt": ""}, ya no podrá iniciar sesión. 
-        console.log("loginSafe");
-        /*
-        La solución a este problema es muy simple y 
-        todo lo que necesita hacer es configurar explícitamente el selector de consultas.
-        */
+// login para usuarios, revisar variable "security".
+app.post('/login',function(req, res) {
+    if (security) {
+        // Se ejecuta en modo seguro
+        // Si en los parametros del POST contiene {"$gt": ""} en los campos de la URL, no podrá iniciar sesión. 
+        console.log("Ejecución de login en modo seguro");
+
         var user = sanitize(req.body.user);
         var password = sanitize(req.body.password);
-        User.findOne({'user': { $in: [user] },'password': { $in: [password] }},function(err,data){
-            // Hay q realizar una mejora para castear el mensaje de error cuando se realiza una inyección y el sistema la liquida
-            if(err){
+        /*  
+            Como vimos las variables user y password tienen la forma sanetizada de los datos obtenidos desde el body.
+            En pocas y burdas palabras la dependencia "mongo-sanitize" convierte el contenido del body utilizado en 
+            una cadena de caracteres sin el signo "$".
+        */
+        User.findOne({'user': { $in: [user] }, 'password': { $in: [password] }}, function(err, data) {
+            // Hay que realizar una mejora para castear el mensaje de error desde mongodb.
+            if(err) {
                 res.send(err);
-            }else if(data){
+            } else if(data) {
                 console.log(data);
-                res.send('Usuario "'+ data.user + '" logeado exitosamente');
-            }else {
-                console.log('You are not hacker!!');
+                res.send('Usuario "'+ data.user + '" logueado exitosamente');
+            } else {
+                console.log('You are not hacker!!'); // Mensaje noob
                 res.send('Usuario o password incorrecto!');
             }
-        })
-    }
-    else {
-        // Se ejecuta la query no segura
-        // Si en los parametros del POST tiene {"$ gt": ""}, podrá iniciar sesión. 
-        console.log("loginFake");
+        });
+    } else {
+        // Se ejecuta en modo no seguro
+        // Si en los parametros del POST tiene {"$gt": ""} en los campos de la URL, podrá iniciar sesión. 
+        console.log("Ejecución de login en modo no seguro");
         /*
-            El operador {"$ gt": ""} indica a DB que devuelva el correo electrónico y la contraseña mayor que "", 
+            El operador {"$gt": ""} indica a la BD que devuelva el usuario y la contraseña mayor que "", 
             lo que da como resultado verdadero y devuelve los datos que permiten al usuario 
             para iniciar sesión sin proporcionar valores reales en los campos.
         */
-        User.findOne({'user':req.body.user,'password':req.body.password},function(err,data){
-            if(err){
+        User.findOne({ 'user': req.body.user, 'password': req.body.password }, function(err, data) {
+            // Hay que realizar una mejora para castear el mensaje de error desde mongodb.
+            if(err) {
                 res.send(err);
-            }else if(data){
+            } else if(data) {
                 console.log(data);
-                console.log('You are hacker!!');
+                console.log('You are hacker!!'); // Mensaje noob
                 res.send('Usuario "' + data.user + '" logeado exitosamente');
-            }else {
+            } else {
                 res.send('Usuario o password incorrecto!');
             }
-        })
+        });
     }
 });
 
 var server = app.listen(3000, function () {
-    mongoose.connect('mongodb://localhost/nosqlinyect', { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect('mongodb://localhost/nosqlinject', { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('Express app listening on port %d', server.address().port);
 
+    // Creador de seeds
     if (seed) {
         // genera tres registros en la base de datos justo en la "tabla/esquema User"
         [['David', 'david', '1234'], ['Emiliano', 'emito', '1234'], ['Santiago', 'santiago', '1234']].forEach(function (cred) {
