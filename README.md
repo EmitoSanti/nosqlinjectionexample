@@ -17,10 +17,6 @@
     va a proceder al intercambio de información por Operadores de Consulta y Proyección, como "$eq, $gt, $gte,
     $lte, $or, $and, etc".
 
-La siguiente aplicación de node.js se encuentra el el repositorio "https://github.com/EmitoSanti/nosqlinjectionexample",
-pero se realizará la explicación de cada segmento de código, exponiendo el workflow del sistema y de los usuarios (común y 
-atacante)
-
 ### Prerequisitos, tener instalado:
     * mongodb
     * nodejs
@@ -29,10 +25,9 @@ atacante)
 ## Primer paso en la terminal apuntando al directorio donde esta app.js ejecutar: 
     * npm install
 
-## Segundo paso en la terminal apuntando al directorio donde esta app.js ejecutar:
-    * node app.js
+## Segundo paso ejecutar el servicio de mongod.
 
-## Tercer paso elegir si utilizar una query segura o no segura seteando la variable "security" como true o false respectivamente. 
+## Tercer paso elegir si utilizar ejecución en modo seguro o no seguro seteando la variable "security" como true o false respectivamente. 
     Nota: Si es la primera vez que ejecuta el programa colocar la variable seed en true, luego volverla a false despues de la primera ejecución.
 
 ## Cuarto paso en el directorio de app.js ejecutar: node app
@@ -63,6 +58,3 @@ Fuente: [https://scotch.io/@401/mongodb-injection-in-nodejs]
 
 
 Debemos aprender a estar un paso adelante y realizar un código limpio y seguro.
-
-Inyección NoSQL en aplicaciónes de node.Js y MongoDB
-Esta es mi primera publicación en este medio, nació esta iniciativa al intentar de interpretar una practica que tiene una connotación negativa en algunos puntos de vista, lo que no esta mal; yo lo miro de un punto de vista educativo proveniente de una exposición que realice.

@@ -42,7 +42,7 @@ app.post('/signup', function (req, res) {
     })
 });
   
-// login para usuarios, revisar variable "security".
+// Login para usuarios, revisar variable "security".
 app.post('/login',function(req, res) {
     if (security) {
         // Se ejecuta en modo seguro
@@ -84,7 +84,7 @@ app.post('/login',function(req, res) {
             } else if(data) {
                 console.log(data);
                 console.log('You are hacker!!'); // Mensaje noob
-                res.send('Usuario "' + data.user + '" logeado exitosamente');
+                res.send('Usuario "' + data.user + '" logueado exitosamente');
             } else {
                 res.send('Usuario o password incorrecto!');
             }
