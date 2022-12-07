@@ -9,7 +9,7 @@
   "author": "Emiliano Santi",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "mongo-sanitize": "^1.0.1",
     "mongoose": "^5.7.8"
   }
